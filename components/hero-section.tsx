@@ -61,28 +61,30 @@ export default function HeroSection() {
     <section id="hero" className="min-h-screen flex items-center justify-center bg-black text-white relative overflow-hidden">
       {/* Background gradient */}
       <div className="absolute inset-0 bg-gradient-to-br from-[#5d21da]/20 via-black to-black"></div>
-      
-      {/* Animated background elements */}
-      <div className="absolute inset-0">
-        {[...Array(20)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-2 h-2 bg-[#5d21da]/30 rounded-full"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-            }}
-            animate={{
-              y: [0, -100, 0],
-              opacity: [0, 1, 0],
-            }}
-            transition={{
-              duration: 3 + Math.random() * 2,
-              repeat: Infinity,
-              delay: Math.random() * 2,
-            }}
-          />
-        ))}
+
+      {/* Ambient shapes + subtle grid, replacing a scattered particle field with a
+          deliberate, fewer-and-larger composition */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div
+          className="absolute inset-0 opacity-[0.15]"
+          style={{
+            backgroundImage:
+              'linear-gradient(to right, rgba(255,255,255,0.06) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.06) 1px, transparent 1px)',
+            backgroundSize: '64px 64px',
+            maskImage: 'radial-gradient(ellipse 70% 60% at 50% 40%, black 30%, transparent 80%)',
+          }}
+        />
+        <motion.div
+          animate={{ y: [0, -18, 0], rotate: [0, 6, 0] }}
+          transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
+          className="absolute -top-16 right-[8%] h-72 w-72 rounded-full bg-brand/10 blur-3xl"
+        />
+        <motion.div
+          animate={{ y: [0, 20, 0] }}
+          transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut' }}
+          className="absolute bottom-[-6rem] left-[6%] h-80 w-80 rounded-full bg-brand-light/10 blur-3xl"
+        />
+        <div className="absolute top-1/3 left-1/2 h-64 w-64 -translate-x-1/2 rounded-full border border-white/5" />
       </div>
 
       <div className="container mx-auto px-6 relative z-10">
@@ -133,7 +135,7 @@ export default function HeroSection() {
               <Button
                 asChild
                 size="lg"
-                className="bg-[#5d21da] hover:bg-[#4a1ba8] text-white px-8 py-6 text-lg rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-[#5d21da]/25"
+                className="bg-brand hover:bg-brand-dark text-white px-8 py-6 text-lg rounded-full transition-all duration-300 hover:-translate-y-0.5 shadow-brand-md hover:shadow-brand-glow"
               >
                 <a href={heroData.ctaLink} className="flex items-center gap-2">
                   {heroData.ctaText}

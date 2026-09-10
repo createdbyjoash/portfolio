@@ -7,6 +7,8 @@ import { ArrowRight, Mail, MapPin, Phone } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { siteConfig } from '@/lib/site-config';
+import { SectionHeading } from '@/components/ui/section-heading';
+import { IconBadge } from '@/components/ui/icon-badge';
 
 export default function ContactSection() {
   const [socials, setSocials] = useState<Social[]>([]);
@@ -33,8 +35,8 @@ export default function ContactSection() {
     <section ref={ref} className="py-20 bg-black text-white relative overflow-hidden">
       {/* Background elements */}
       <div className="absolute inset-0">
-        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-[#5d21da]/10 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[#5d21da]/5 rounded-full blur-3xl"></div>
+        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-brand/10 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-brand/5 rounded-full blur-3xl"></div>
       </div>
 
       <div className="container mx-auto px-6 relative z-10">
@@ -44,11 +46,7 @@ export default function ContactSection() {
           transition={{ duration: 0.8 }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl md:text-5xl font-bold mb-6">
-            <span className="bg-gradient-to-r from-white to-[#5d21da] bg-clip-text text-transparent">
-              Let's Work Together
-            </span>
-          </h2>
+          <SectionHeading kicker="Contact" title="Let's Work Together" className="mb-6" />
           <p className="text-xl text-slate-300 max-w-2xl mx-auto">
             Have a project in mind? Let's discuss how we can bring your ideas to life.
           </p>
@@ -62,7 +60,7 @@ export default function ContactSection() {
             className="rounded-[28px] border border-slate-800 bg-slate-900/50 p-8"
           >
             <div className="max-w-xl space-y-6">
-              <p className="text-sm uppercase tracking-[0.25em] text-[#8f5cff]">
+              <p className="text-sm uppercase tracking-[0.25em] text-brand-light">
                 Best next step
               </p>
               <h3 className="text-3xl font-semibold leading-tight text-white">
@@ -84,7 +82,7 @@ export default function ContactSection() {
               <Button
                 asChild
                 size="lg"
-                className="h-12 rounded-full bg-[#5d21da] px-7 text-white hover:bg-[#4a1ba8]"
+                className="h-12 rounded-full bg-brand px-7 text-white shadow-brand-md hover:bg-brand-dark hover:shadow-brand-glow"
               >
                 <a href="#schedule">
                   Go to scheduling
@@ -101,7 +99,7 @@ export default function ContactSection() {
             className="space-y-8"
           >
             <div>
-              <h3 className="text-2xl font-semibold mb-6 text-[#5d21da]">
+              <h3 className="text-2xl font-semibold mb-6 text-brand-lighter">
                 Get in Touch
               </h3>
               <p className="text-slate-300 leading-relaxed mb-8">
@@ -116,11 +114,11 @@ export default function ContactSection() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.6, delay: 0.6 }}
-                className="flex items-center gap-4 p-4 bg-slate-900/50 rounded-xl border border-slate-800 hover:border-[#5d21da]/30 transition-colors duration-300"
+                className="flex items-center gap-4 p-4 bg-slate-900/50 rounded-xl border border-slate-800 hover:border-brand/30 transition-colors duration-300"
               >
-                <div className="w-12 h-12 bg-[#5d21da]/20 rounded-lg flex items-center justify-center">
-                  <Mail className="w-6 h-6 text-[#5d21da]" />
-                </div>
+                <IconBadge>
+                  <Mail className="w-6 h-6" />
+                </IconBadge>
                 <div>
                   <h4 className="font-medium text-white">Email</h4>
                   <p className="text-slate-400">{siteConfig.email}</p>
@@ -131,11 +129,11 @@ export default function ContactSection() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.6, delay: 0.7 }}
-                className="flex items-center gap-4 p-4 bg-slate-900/50 rounded-xl border border-slate-800 hover:border-[#5d21da]/30 transition-colors duration-300"
+                className="flex items-center gap-4 p-4 bg-slate-900/50 rounded-xl border border-slate-800 hover:border-brand/30 transition-colors duration-300"
               >
-                <div className="w-12 h-12 bg-[#5d21da]/20 rounded-lg flex items-center justify-center">
-                  <Phone className="w-6 h-6 text-[#5d21da]" />
-                </div>
+                <IconBadge>
+                  <Phone className="w-6 h-6" />
+                </IconBadge>
                 <div>
                   <h4 className="font-medium text-white">Phone</h4>
                   <p className="text-slate-400">{siteConfig.phone}</p>
@@ -146,11 +144,11 @@ export default function ContactSection() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.6, delay: 0.8 }}
-                className="flex items-center gap-4 p-4 bg-slate-900/50 rounded-xl border border-slate-800 hover:border-[#5d21da]/30 transition-colors duration-300"
+                className="flex items-center gap-4 p-4 bg-slate-900/50 rounded-xl border border-slate-800 hover:border-brand/30 transition-colors duration-300"
               >
-                <div className="w-12 h-12 bg-[#5d21da]/20 rounded-lg flex items-center justify-center">
-                  <MapPin className="w-6 h-6 text-[#5d21da]" />
-                </div>
+                <IconBadge>
+                  <MapPin className="w-6 h-6" />
+                </IconBadge>
                 <div>
                   <h4 className="font-medium text-white">Location</h4>
                   <p className="text-slate-400">{siteConfig.location}</p>
@@ -178,16 +176,15 @@ export default function ContactSection() {
                       initial={{ opacity: 0, scale: 0.8 }}
                       animate={isInView ? { opacity: 1, scale: 1 } : {}}
                       transition={{ duration: 0.4, delay: 1 + index * 0.1 }}
-                      whileHover={{ scale: 1.1, y: -2 }}
-                      className="w-12 h-12 bg-slate-900 border border-slate-700 rounded-lg flex items-center justify-center hover:border-[#5d21da] hover:bg-[#5d21da]/10 transition-all duration-300"
+                      whileHover={{ scale: 1.06, y: -2 }}
                     >
-                      {social.icon ? (
-                        <img src={social.icon} alt={social.platform} className="w-6 h-6" />
-                      ) : (
-                        <span className="text-[#5d21da] font-bold">
-                          {social.platform.charAt(0)}
-                        </span>
-                      )}
+                      <IconBadge className="hover:border-brand/50 transition-colors duration-300">
+                        {social.icon ? (
+                          <img src={social.icon} alt={social.platform} className="w-6 h-6" />
+                        ) : (
+                          <span className="font-bold">{social.platform.charAt(0)}</span>
+                        )}
+                      </IconBadge>
                     </motion.a>
                   ))}
                 </div>

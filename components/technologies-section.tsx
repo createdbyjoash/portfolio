@@ -4,6 +4,9 @@ import { motion, useInView } from 'framer-motion';
 import { useRef, useEffect, useState } from 'react';
 import { api, Technology } from '@/lib/api';
 import { toast } from 'sonner';
+import { SectionHeading } from '@/components/ui/section-heading';
+import { IconBadge } from '@/components/ui/icon-badge';
+import { SurfaceCard } from '@/components/ui/surface-card';
 
 export default function TechnologiesSection() {
   const [technologies, setTechnologies] = useState<Technology[]>([]);
@@ -51,11 +54,7 @@ export default function TechnologiesSection() {
           transition={{ duration: 0.8 }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl md:text-5xl font-bold mb-6">
-            <span className="bg-gradient-to-r from-white to-[#5d21da] bg-clip-text text-transparent">
-              Technologies & Skills
-            </span>
-          </h2>
+          <SectionHeading kicker="Toolkit" title="Technologies & Skills" className="mb-6" />
           <p className="text-xl text-slate-300 max-w-2xl mx-auto">
             A selection of technologies and skills I use to build, automate, and launch modern digital products.
           </p>
@@ -76,32 +75,22 @@ export default function TechnologiesSection() {
                     whileHover={{ scale: 1.05, y: -5, transition: { duration: 0.2 } }}
                     className="group"
                   >
-                    <div className="w-44 h-44 bg-slate-900 border border-slate-800 rounded-xl p-4 text-center hover:border-[#5d21da]/50 transition-all duration-300 hover:shadow-lg hover:shadow-[#5d21da]/10 flex flex-col items-center justify-center">
+                    <SurfaceCard className="w-44 h-44 rounded-lg p-4 text-center flex flex-col items-center justify-center">
                       {tech.icon ? (
                         <img src={typeof tech.icon === 'string' ? tech.icon : (tech.icon as any).url} alt={tech.name} className="w-12 h-12 mx-auto mb-3 object-contain" />
                       ) : (
-                        <div className="w-12 h-12 mx-auto mb-3 bg-gradient-to-br from-[#5d21da] to-[#4a1ba8] rounded-lg flex items-center justify-center text-white font-bold text-lg">
-                          {tech.name.charAt(0)}
-                        </div>
+                        <IconBadge size="md" className="mx-auto mb-3">
+                          <span className="font-bold text-lg text-white">{tech.name.charAt(0)}</span>
+                        </IconBadge>
                       )}
-                      <h4 className="font-semibold text-white group-hover:text-[#5d21da] transition-colors duration-300">{tech.name}</h4>
-                    </div>
+                      <h4 className="font-semibold text-white group-hover:text-brand-lighter transition-colors duration-300">{tech.name}</h4>
+                    </SurfaceCard>
                   </motion.div>
                 ))}
           </div>
         </div>
 
-        <div className="absolute inset-0 pointer-events-none">
-          {[...Array(10)].map((_, i) => (
-            <motion.div
-              key={i}
-              className="absolute w-1 h-1 bg-[#5d21da]/40 rounded-full"
-              style={{ left: `${(i * 37) % 100}%`, top: `${(i * 23) % 100}%` }}
-              animate={{ scale: [1, 1.5, 1], opacity: [0.4, 0.8, 0.4] }}
-              transition={{ duration: 2 + (i % 3), repeat: Infinity, delay: i * 0.2 }}
-            />
-          ))}
-        </div>
+        <div className="absolute -bottom-24 left-1/2 -translate-x-1/2 h-72 w-[36rem] rounded-full bg-brand/10 blur-3xl pointer-events-none" />
       </div>
     </section>
   );

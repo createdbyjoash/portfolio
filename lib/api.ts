@@ -1,4 +1,14 @@
-const API_BASE_URL = 'https://joash-backend.onrender.com/api';
+export const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL ?? 'https://joash-backend.onrender.com/api';
+
+export interface Booking {
+  id: number;
+  invitee_name: string | null;
+  invitee_email: string | null;
+  event_type: string | null;
+  scheduled_at: string | null;
+  status: string | null;
+  created_at: string;
+}
 
 // Types for API responses
 export interface HeroData {
@@ -249,9 +259,14 @@ export const api = {
   getSocials: async (): Promise<Social[]> => {
     const response = await fetch(`${API_BASE_URL}/socials`);
     if (!response.ok) throw new Error('Failed to fetch social links');
-    return response.json();
+    const body = await response.json();
+    return body?.socials ?? [];
   },
 
+  // NOTE: there is no bulk PUT /socials route on the backend (each social is
+  // updated individually via PUT /socials/:id). This function is unused by
+  // any component — SocialsEditor is currently read-only. Left as a stub in
+  // case bulk editing is wired up later.
   updateSocials: async (data: Social[], token: string): Promise<Social[]> => {
     const response = await fetch(`${API_BASE_URL}/socials`, {
       method: 'PUT',
@@ -314,13 +329,21 @@ export const api = {
     return response.json();
   },
 
-  logout: async (token: string): Promise<void> => {
-    const response = await fetch(`${API_BASE_URL}/auth/logout`, {
-      method: 'POST',
+  // Auth is a stateless JWT — logging out is purely a client-side token removal
+  // (see lib/auth.ts clearToken()). No backend call needed.
+  logout: async (): Promise<void> => {
+    return Promise.resolve();
+  },
+
+  // Bookings (Calendly webhook events)
+  getBookings: async (token: string): Promise<Booking[]> => {
+    const response = await fetch(`${API_BASE_URL}/bookings`, {
       headers: {
         'Authorization': `Bearer ${token}`,
       },
     });
-    if (!response.ok) throw new Error('Failed to logout');
+    if (!response.ok) throw new Error('Failed to fetch bookings');
+    const body = await response.json();
+    return body.bookings ?? [];
   },
 };

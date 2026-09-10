@@ -2,6 +2,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { api } from '@/lib/api';
+import { SectionHeading } from '@/components/ui/section-heading';
+import { IconBadge } from '@/components/ui/icon-badge';
 
 export default function AboutSection() {
   const [aboutData, setAboutData] = useState({
@@ -65,14 +67,14 @@ export default function AboutSection() {
                   <img
                     src={aboutData.profileImage}
                     alt="Profile"
-                    className="relative z-10 w-full h-auto rounded-2xl shadow-2xl"
+                    className="relative z-10 w-full h-auto rounded-2xl shadow-brand-lg"
                   />
                 ) : (
-                  <div className="relative z-10 w-full aspect-square bg-gradient-to-br from-[#5d21da] to-[#4a1ba8] rounded-2xl flex items-center justify-center">
+                  <IconBadge size="lg" className="relative z-10 w-full aspect-square !rounded-2xl">
                     <span className="text-6xl font-bold text-white">
                       {aboutData.title ? aboutData.title.charAt(0) : ""}
                     </span>
-                  </div>
+                  </IconBadge>
                 )}
               </div>
             </motion.div>
@@ -85,16 +87,14 @@ export default function AboutSection() {
               className="space-y-8"
             >
               <div>
-                <motion.h2
+                <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={isInView ? { opacity: 1, y: 0 } : {}}
                   transition={{ duration: 0.6, delay: 0.6 }}
-                  className="text-4xl md:text-5xl font-bold mb-6"
+                  className="mb-6"
                 >
-                  <span className="bg-gradient-to-r from-white to-[#5d21da] bg-clip-text text-transparent">
-                    {aboutData.title}
-                  </span>
-                </motion.h2>
+                  <SectionHeading kicker="About" title={aboutData.title} align="left" />
+                </motion.div>
 
                 <motion.p
                   initial={{ opacity: 0, y: 20 }}
@@ -123,9 +123,9 @@ export default function AboutSection() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={isInView ? { opacity: 1, y: 0 } : {}}
                     transition={{ duration: 0.4, delay: 1.6 + index * 0.1 }}
-                    className="text-center"
+                    className="rounded-xl border border-white/10 bg-black/30 px-3 py-5 text-center shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]"
                   >
-                    <div className="text-2xl md:text-3xl font-bold text-[#5d21da]">
+                    <div className="text-2xl md:text-3xl font-bold text-brand-lighter">
                       {stat.number}
                     </div>
                     <div className="text-slate-400 text-sm">

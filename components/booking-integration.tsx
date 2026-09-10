@@ -24,49 +24,50 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { siteConfig } from '@/lib/site-config';
+import { SectionHeading } from '@/components/ui/section-heading';
+import { IconBadge } from '@/components/ui/icon-badge';
+import { API_BASE_URL } from '@/lib/api';
 
-const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL ?? 'https://joash-backend.onrender.com/api';
-
-async function logBookingEvent(eventType: string, payload?: Record<string, unknown>) {
+// Real Calendly webhooks need a paid Standard plan, which isn't in use here —
+// so booking capture happens client-side instead: the embed fires this event
+// the moment a visitor books, and we record it ourselves (backend/controllers/
+// bookingController.js createBooking) rather than relying on a server-side
+// Calendly callback.
+async function recordBooking(payload?: Record<string, unknown>) {
   try {
-    await fetch(`${BACKEND_URL}/contact`, {
+    await fetch(`${API_BASE_URL}/bookings`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        name: (payload?.invitee_full_name as string) ?? 'Calendly User',
-        email: (payload?.invitee_email as string) ?? '',
-        message: `Booking event: ${eventType}${payload?.event_type_name ? ` — ${payload.event_type_name}` : ''}`,
+        inviteeName: (payload?.invitee_full_name as string) ?? 'Unknown',
+        inviteeEmail: (payload?.invitee_email as string) ?? '',
+        eventType: 'invitee.created',
+        scheduledAt: (payload?.event_start_time as string) ?? null,
       }),
     });
   } catch {
-    // Fire-and-forget — never block the UX
+    // Fire-and-forget — never block the booking UX on our own logging call
   }
 }
 
 export default function BookingIntegration() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [justScheduled, setJustScheduled] = useState(false);
 
-  // Listen for Calendly events inside the dialog
   useCalendlyEventListener({
     onEventScheduled: (e) => {
       const payload = e.data?.payload as Record<string, unknown> | undefined;
-      logBookingEvent('event_scheduled', payload);
-    },
-    onDateAndTimeSelected: () => {
-      logBookingEvent('date_time_selected');
-    },
-    onEventTypeViewed: () => {
-      logBookingEvent('widget_viewed');
+      recordBooking(payload);
+      setJustScheduled(true);
     },
   });
 
   const handleOpenDialog = () => {
-    logBookingEvent('dialog_opened');
     setIsDialogOpen(true);
   };
 
   const callHighlights = [
-    '20 to 30 minute discovery call',
+    '15 minute MVP deep dive',
     'Project scope and goals review',
     'Timeline and budget alignment',
     'Clear next steps after the call',
@@ -98,7 +99,7 @@ export default function BookingIntegration() {
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(93,33,218,0.18),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(93,33,218,0.12),transparent_30%)]"></div>
         <div className="absolute top-12 left-8 h-40 w-40 rounded-full border border-white/10"></div>
-        <div className="absolute bottom-12 right-8 h-56 w-56 rounded-full border border-[#5d21da]/20"></div>
+        <div className="absolute bottom-12 right-8 h-56 w-56 rounded-full border border-brand/20"></div>
       </div>
 
       <div className="container mx-auto relative z-10 px-6">
@@ -110,11 +111,7 @@ export default function BookingIntegration() {
           className="text-center mb-14"
         >
           
-          <h2 className="text-4xl md:text-5xl font-bold mb-6">
-            <span className="bg-gradient-to-r from-white to-[#5d21da] bg-clip-text text-transparent">
-              Schedule a call
-            </span> 
-          </h2>
+          <SectionHeading kicker="Availability" title="Schedule a call" className="mb-6" />
           <p className="mx-auto max-w-3xl text-lg text-slate-300 md:text-xl">
             Use this call to pressure-test your idea, define the right MVP, or
             unblock a product decision before development starts.
@@ -131,11 +128,11 @@ export default function BookingIntegration() {
           >
             <div className="mb-8 flex flex-wrap items-center gap-3">
               <Badge className="bg-white text-black hover:bg-white">
-                Discovery Call
+                MVP Deep Dive
               </Badge>
               <div className="flex items-center gap-2 text-sm text-slate-300">
-                <Clock3 className="h-4 w-4 text-[#a77bff]" />
-                20-30 mins
+                <Clock3 className="h-4 w-4 text-brand-lighter" />
+                15 mins
               </div>
             </div>
 
@@ -155,7 +152,7 @@ export default function BookingIntegration() {
                   key={item}
                   className="flex items-start gap-3 rounded-2xl border border-white/8 bg-black/30 px-4 py-4"
                 >
-                  <CheckCircle2 className="mt-0.5 h-5 w-5 text-[#8f5cff]" />
+                  <CheckCircle2 className="mt-0.5 h-5 w-5 text-brand-light" />
                   <span className="text-sm text-slate-200">{item}</span>
                 </div>
               ))}
@@ -167,7 +164,7 @@ export default function BookingIntegration() {
                   <Button
                     size="lg"
                     onClick={handleOpenDialog}
-                    className="h-12 rounded-full bg-[#5d21da] px-7 text-white hover:bg-[#4a1ba8]"
+                    className="h-12 rounded-full bg-brand px-7 text-white shadow-brand-md hover:bg-brand-dark hover:shadow-brand-glow"
                   >
                     Book a call
                     <CalendarDays className="h-4 w-4" />
@@ -176,7 +173,7 @@ export default function BookingIntegration() {
                 <DialogContent className="max-w-5xl border-slate-800 bg-slate-950 p-0 text-white sm:max-w-5xl">
                   <DialogHeader className="border-b border-white/10 px-6 py-5">
                     <DialogTitle className="text-2xl">
-                      Schedule your discovery call
+                      Schedule your MVP deep dive
                     </DialogTitle>
                     <DialogDescription className="text-slate-400">
                       Choose a slot and add project context so I can prepare before we meet.
@@ -185,7 +182,7 @@ export default function BookingIntegration() {
                   <div className="h-[75vh] min-h-[640px] overflow-hidden rounded-b-lg relative">
                     {/* Loading shimmer behind the Calendly widget */}
                     <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-white">
-                      <div className="h-8 w-8 rounded-full border-4 border-[#5d21da] border-t-transparent animate-spin" />
+                      <div className="h-8 w-8 rounded-full border-4 border-brand border-t-transparent animate-spin" />
                       <p className="text-sm text-slate-500">Loading scheduler…</p>
                     </div>
                     <InlineWidget
@@ -206,7 +203,6 @@ export default function BookingIntegration() {
                   href={siteConfig.calendlyUrl}
                   target="_blank"
                   rel="noreferrer"
-                  onClick={() => logBookingEvent('opened_external_tab')}
                 >
                   Open in new tab
                   <ExternalLink className="h-4 w-4" />
@@ -214,11 +210,18 @@ export default function BookingIntegration() {
               </Button>
             </div>
 
+            {justScheduled && (
+              <p className="mt-4 flex items-center gap-2 text-sm text-emerald-400">
+                <CheckCircle2 className="h-4 w-4" />
+                Call booked — a confirmation email is on its way.
+              </p>
+            )}
+
             <p className="mt-4 text-sm text-slate-400">
               If the scheduler does not load, email{' '}
               <a
                 href={`mailto:${siteConfig.email}`}
-                className="text-white underline decoration-[#5d21da]/60 underline-offset-4"
+                className="text-white underline decoration-brand/60 underline-offset-4"
               >
                 {siteConfig.email}
               </a>{' '}
@@ -239,9 +242,9 @@ export default function BookingIntegration() {
                 className="rounded-[28px] border border-white/10 bg-slate-950/80 p-6"
               >
                 <div className="mb-4 flex items-center gap-4">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#5d21da]/15 text-[#b596ff]">
+                  <IconBadge size="md">
                     <step.icon className="h-5 w-5" />
-                  </div>
+                  </IconBadge>
                   <div>
                     <p className="text-sm uppercase tracking-[0.22em] text-slate-500">
                       Step {index + 1}
@@ -260,10 +263,10 @@ export default function BookingIntegration() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-120px' }}
               transition={{ duration: 0.7, delay: 0.3 }}
-              className="rounded-[28px] border border-[#5d21da]/20 bg-gradient-to-br from-[#5d21da]/15 via-slate-950 to-slate-950 p-6"
+              className="rounded-[28px] border border-brand/20 bg-gradient-to-br from-brand/15 via-slate-950 to-slate-950 p-6"
             >
               <div className="mb-4 flex items-center gap-3">
-                <Mail className="h-5 w-5 text-[#c1a8ff]" />
+                <Mail className="h-5 w-5 text-brand-lightest" />
                 <h3 className="text-lg font-semibold">Before you book</h3>
               </div>
               <p className="text-slate-300">

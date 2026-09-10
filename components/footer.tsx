@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { api, Social } from '@/lib/api';
 import { Heart } from 'lucide-react';
+import { IconBadge } from '@/components/ui/icon-badge';
 
 export default function Footer() {
   const [socials, setSocials] = useState<Social[]>([]);
@@ -33,7 +34,7 @@ export default function Footer() {
             className="text-center md:text-left"
           >
             <h3 className="text-2xl font-bold mb-2">
-              <span className="bg-gradient-to-r from-white to-[#5d21da] bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-white to-brand bg-clip-text text-transparent">
                 Joash Adeoye
               </span>
             </h3>
@@ -59,16 +60,15 @@ export default function Footer() {
                   initial={{ opacity: 0, scale: 0.8 }}
                   whileInView={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.4, delay: 0.3 + index * 0.1 }}
-                  whileHover={{ scale: 1.1, y: -2 }}
-                  className="w-10 h-10 bg-slate-900 border border-slate-700 rounded-lg flex items-center justify-center hover:border-[#5d21da] hover:bg-[#5d21da]/10 transition-all duration-300"
+                  whileHover={{ scale: 1.06, y: -2 }}
                 >
-                  {social.icon ? (
-                    <img src={social.icon} alt={social.platform} className="w-5 h-5" />
-                  ) : (
-                    <span className="text-[#5d21da] font-bold text-sm">
-                      {social.platform.charAt(0)}
-                    </span>
-                  )}
+                  <IconBadge size="sm">
+                    {social.icon ? (
+                      <img src={social.icon} alt={social.platform} className="w-5 h-5" />
+                    ) : (
+                      <span className="font-bold text-sm">{social.platform.charAt(0)}</span>
+                    )}
+                  </IconBadge>
                 </motion.a>
               ))}
           </motion.div>
@@ -81,7 +81,7 @@ export default function Footer() {
             className="text-center md:text-right"
           >
             <p className="text-slate-400 flex items-center justify-center md:justify-end gap-1">
-              Made with <Heart className="w-4 h-4 text-[#5d21da]" fill="currentColor" /> 
+              Made with <Heart className="w-4 h-4 text-brand" fill="currentColor" />
               © {new Date().getFullYear()}
             </p>
           </motion.div>

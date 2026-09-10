@@ -12,6 +12,7 @@ import HeroEditor from '@/components/admin/HeroEditor';
 import AboutEditor from '@/components/admin/AboutEditor';
 import TechnologiesEditor from '@/components/admin/TechnologiesEditor';
 import ProjectsEditor from '@/components/admin/ProjectsEditor';
+import BookingsViewer from '@/components/admin/BookingsViewer';
 
 export default function AdminDashboard() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -27,10 +28,7 @@ export default function AdminDashboard() {
 
   const handleLogout = async () => {
     try {
-      const token = auth.getToken();
-      if (token) {
-        await api.logout(token);
-      }
+      await api.logout();
     } catch (error) {
       console.error('Logout error:', error);
     } finally {
@@ -68,7 +66,7 @@ export default function AdminDashboard() {
           </Button>
         </div>
         <Tabs defaultValue="hero" className="space-y-2">
-          <TabsList className="grid w-full grid-cols-4 gap-2 bg-slate-900 rounded-md p-1">
+          <TabsList className="grid w-full grid-cols-5 gap-2 bg-slate-900 rounded-md p-1">
             <TabsTrigger value="hero" className="data-[state=active]:bg-[#5d21da] py-1 text-sm text-center rounded-sm">
               Hero
             </TabsTrigger>
@@ -80,6 +78,9 @@ export default function AdminDashboard() {
             </TabsTrigger>
             <TabsTrigger value="projects" className="data-[state=active]:bg-[#5d21da] py-1 text-sm text-center rounded-sm">
               Projects
+            </TabsTrigger>
+            <TabsTrigger value="bookings" className="data-[state=active]:bg-[#5d21da] py-1 text-sm text-center rounded-sm">
+              Bookings
             </TabsTrigger>
           </TabsList>
 
@@ -97,6 +98,10 @@ export default function AdminDashboard() {
 
           <TabsContent value="projects" className="p-0">
             <ProjectsEditor />
+          </TabsContent>
+
+          <TabsContent value="bookings" className="p-0">
+            <BookingsViewer />
           </TabsContent>
         </Tabs>
       </motion.div>

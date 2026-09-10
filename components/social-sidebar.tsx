@@ -3,6 +3,7 @@
 import { motion } from "framer-motion"
 import { Github, Linkedin, Mail, Twitter } from "lucide-react"
 import { useEffect, useState } from "react"
+import { API_BASE_URL } from "@/lib/api"
 
 interface SocialLink {
   platform: string
@@ -25,7 +26,7 @@ export default function SocialSidebar() {
       { platform: 'email', url: 'mailto:joashadeoye@gmail.com', icon: 'email' },
     ]
 
-    fetch("https://joash-backend.onrender.com/api/socials", {
+    fetch(`${API_BASE_URL}/socials`, {
       signal: controller.signal,
       headers: {
         Accept: "application/json",
@@ -38,7 +39,8 @@ export default function SocialSidebar() {
         }
         return res.json()
       })
-      .then((data) => {
+      .then((body) => {
+        const data = Array.isArray(body) ? body : body?.socials
         if (Array.isArray(data) && data.length > 0) {
           setSocials(data)
         } else {
@@ -146,7 +148,7 @@ export default function SocialSidebar() {
         return (
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
             <rect width="24" height="24" rx="4" fill="#fff" opacity="0" />
-            <path d="M6.5 12.2c0-1.3 1-2.3 2.3-2.3 1.3 0 2.3 1 2.3 2.3 0 1.3-1 2.3-2.3 2.3-1.3 0-2.3-1-2.3-2.3zm6.2 0c0-3 2.3-5.2 5.1-5.2 2.8 0 5.1 2.2 5.1 5.2v.8h-3.2v-.8c0-1.2-1-1.8-2.2-1.8-1.2 0-2.2.6-2.2 1.8v.8h-2.6v-.8z" fill="#5d21da" />
+            <path d="M6.5 12.2c0-1.3 1-2.3 2.3-2.3 1.3 0 2.3 1 2.3 2.3 0 1.3-1 2.3-2.3 2.3-1.3 0-2.3-1-2.3-2.3zm6.2 0c0-3 2.3-5.2 5.1-5.2 2.8 0 5.1 2.2 5.1 5.2v.8h-3.2v-.8c0-1.2-1-1.8-2.2-1.8-1.2 0-2.2.6-2.2 1.8v.8h-2.6v-.8z" fill="currentColor" />
           </svg>
         )
       default:
@@ -178,8 +180,8 @@ export default function SocialSidebar() {
               href={social.url}
               target="_blank"
               rel="noopener noreferrer"
-              whileHover={{ y: -3, color: '#5d21da' }}
-              className="text-gray-400 hover:text-[#5d21da] transition-colors"
+              whileHover={{ y: -3 }}
+              className="text-slate-400 hover:text-brand-light transition-colors"
               aria-label={ariaLabel}
             >
               {isIconUrl ? (
@@ -190,7 +192,7 @@ export default function SocialSidebar() {
             </motion.a>
           )
         })}
-        <div className="w-px h-24 bg-gray-600"></div>
+        <div className="w-px h-24 bg-slate-700"></div>
       </div>
     </motion.div>
   )

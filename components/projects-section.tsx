@@ -4,6 +4,10 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ExternalLink, Github, Star } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
+import { API_BASE_URL } from '@/lib/api';
+import { SectionHeading } from '@/components/ui/section-heading';
+import { IconBadge } from '@/components/ui/icon-badge';
+import { SurfaceCard } from '@/components/ui/surface-card';
 
 type Project = {
   id: string;
@@ -25,7 +29,7 @@ export default function ProjectsSection() {
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const res = await fetch('https://joash-backend.onrender.com/api/projects');
+        const res = await fetch(`${API_BASE_URL}/projects`);
         const data = await res.json();
         setProjects(Array.isArray(data.projects) ? data.projects : []);
       } catch (error) {
@@ -55,24 +59,12 @@ export default function ProjectsSection() {
           transition={{ duration: 0.8 }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl md:text-5xl font-bold mb-6">
-            <span className="bg-gradient-to-r from-white to-[#5d21da] bg-clip-text text-transparent">
-              Featured Projects
-            </span>
-          </h2>
+          <SectionHeading kicker="Portfolio" title="Featured Projects" className="mb-6" />
           <p className="text-xl text-slate-300 max-w-2xl mx-auto">
             A showcase of my recent work and creative solutions
           </p>
         </motion.div>
 
-        {/* All Projects Grid */}
-        <motion.h3
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.5 }}
-          className="text-2xl md:text-3xl font-bold mb-12 text-center"
-        >
-        </motion.h3>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {allProjects.map((project, index) => (
             <motion.div
@@ -80,10 +72,9 @@ export default function ProjectsSection() {
               initial={{ opacity: 0, y: 50 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: 0.7 + index * 0.1 }}
-              whileHover={{ y: -10 }}
               className="group"
             >
-              <div className="bg-slate-800 border border-slate-700 rounded-xl overflow-hidden hover:border-[#5d21da]/50 transition-all duration-300 hover:shadow-lg hover:shadow-[#5d21da]/10">
+              <SurfaceCard className="overflow-hidden">
                 <div className="relative overflow-hidden">
                   {project.image ? (
                     <img
@@ -92,15 +83,17 @@ export default function ProjectsSection() {
                       className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110"
                     />
                   ) : (
-                    <div className="w-full h-48 bg-gradient-to-br from-[#5d21da] to-[#4a1ba8] flex items-center justify-center">
-                      <span className="text-3xl font-bold text-white">
-                        {project.title.charAt(0)}
-                      </span>
+                    <div className="w-full h-48 flex items-center justify-center bg-gradient-to-br from-[#1c1530] to-[#120d20]">
+                      <IconBadge size="lg">
+                        <span className="text-3xl font-bold text-white">
+                          {project.title.charAt(0)}
+                        </span>
+                      </IconBadge>
                     </div>
                   )}
                 </div>
                 <div className="p-6 space-y-4">
-                  <h4 className="text-xl font-semibold group-hover:text-[#5d21da] transition-colors duration-300">
+                  <h4 className="text-xl font-semibold group-hover:text-brand-lighter transition-colors duration-300">
                     {project.title}
                   </h4>
                   <p className="text-slate-300 text-sm leading-relaxed">
@@ -127,7 +120,7 @@ export default function ProjectsSection() {
                       <Button
                         asChild
                         size="sm"
-                        className="bg-[#5d21da] hover:bg-[#4a1ba8] text-white flex-1"
+                        className="bg-brand hover:bg-brand-dark text-white flex-1"
                       >
                         <a href={project.liveUrl || project.liveLink} target="_blank" rel="noopener noreferrer">
                           <ExternalLink className="w-3 h-3 mr-1" />
@@ -150,7 +143,7 @@ export default function ProjectsSection() {
                     )}
                   </div>
                 </div>
-              </div>
+              </SurfaceCard>
             </motion.div>
           ))}
         </div>
