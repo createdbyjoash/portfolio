@@ -9,6 +9,14 @@ import { SectionHeading } from '@/components/ui/section-heading';
 import { IconBadge } from '@/components/ui/icon-badge';
 import { SurfaceCard } from '@/components/ui/surface-card';
 
+// Project links in the DB are often stored as bare domains (e.g. "mwawazi.com")
+// without a protocol — as a plain href that resolves relative to the current
+// page instead of opening the external site. Normalize to an absolute URL.
+function toAbsoluteUrl(url?: string): string | undefined {
+  if (!url) return undefined;
+  return /^https?:\/\//i.test(url) ? url : `https://${url}`;
+}
+
 type Project = {
   id: string;
   title: string;
@@ -122,7 +130,7 @@ export default function ProjectsSection() {
                         size="sm"
                         className="bg-brand hover:bg-brand-dark text-white flex-1"
                       >
-                        <a href={project.liveUrl || project.liveLink} target="_blank" rel="noopener noreferrer">
+                        <a href={toAbsoluteUrl(project.liveUrl || project.liveLink)} target="_blank" rel="noopener noreferrer">
                           <ExternalLink className="w-3 h-3 mr-1" />
                           Demo
                         </a>
@@ -135,7 +143,7 @@ export default function ProjectsSection() {
                         variant="outline"
                         className="border-slate-600 text-slate-300 hover:bg-slate-700 flex-1"
                       >
-                        <a href={project.githubUrl || project.githubLink} target="_blank" rel="noopener noreferrer">
+                        <a href={toAbsoluteUrl(project.githubUrl || project.githubLink)} target="_blank" rel="noopener noreferrer">
                           <Github className="w-3 h-3 mr-1" />
                           Code
                         </a>

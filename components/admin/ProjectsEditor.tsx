@@ -13,6 +13,14 @@ import { auth } from '@/lib/auth';
 import { toast } from 'sonner';
 import { Plus, Trash2, Edit, X } from 'lucide-react';
 
+// Live/GitHub links are often saved as bare domains (e.g. "mwawazi.com") —
+// as a plain href that resolves relative to the current page. Normalize to
+// an absolute URL before rendering as a link.
+function toAbsoluteUrl(url?: string): string | undefined {
+  if (!url) return undefined;
+  return /^https?:\/\//i.test(url) ? url : `https://${url}`;
+}
+
 export default function ProjectsEditor() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [editingProject, setEditingProject] = useState<Project | null>(null);
@@ -336,7 +344,7 @@ export default function ProjectsEditor() {
                       <div className="flex gap-2 mt-2">
                         {project.liveUrl || project.liveLink ? (
                           <a
-                            href={project.liveUrl || project.liveLink}
+                            href={toAbsoluteUrl(project.liveUrl || project.liveLink)}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-[#5d21da] underline text-xs"
@@ -346,7 +354,7 @@ export default function ProjectsEditor() {
                         ) : null}
                         {project.githubUrl || project.githubLink ? (
                           <a
-                            href={project.githubUrl || project.githubLink}
+                            href={toAbsoluteUrl(project.githubUrl || project.githubLink)}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-slate-400 underline text-xs"
