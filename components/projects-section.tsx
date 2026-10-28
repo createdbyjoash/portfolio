@@ -107,7 +107,7 @@ export default function ProjectsSection() {
                   <h4 className="text-xl font-semibold group-hover:text-brand-lighter transition-colors duration-300">
                     {project.title}
                   </h4>
-                  <p className="text-slate-300 text-sm leading-relaxed">
+                  <p className="text-slate-300 text-sm leading-relaxed line-clamp-2">
                     {project.description}
                   </p>
                   <div className="flex flex-wrap gap-2">
