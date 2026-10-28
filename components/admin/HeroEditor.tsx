@@ -30,19 +30,12 @@ export default function HeroEditor() {
     try {
       const data = await api.getHero();
       const hero = data && data.hero;
-      if (
-        hero &&
-        typeof hero === "object" &&
-        hero.title &&
-        hero.subtitle &&
-        hero.description
-      ) {
+      if (hero && typeof hero === "object") {
         setHeroData((prev) => ({
           ...prev,
-          title: hero.title,
-          subtitle: hero.subtitle,
-          description: hero.description,
-          // ctaText and ctaLink can be left blank or default
+          ...(hero.title !== undefined ? { title: hero.title } : {}),
+          ...(hero.subtitle !== undefined ? { subtitle: hero.subtitle } : {}),
+          ...(hero.description !== undefined ? { description: hero.description } : {}),
         }));
       }
     } catch (error) {

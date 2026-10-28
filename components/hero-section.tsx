@@ -25,22 +25,14 @@ export default function HeroSection() {
       const data = await api.getHero();
       console.log('API getHero response:', data);
       const hero = data && data.hero;
-      if (
-        hero &&
-        typeof hero === "object" &&
-        hero.title &&
-        hero.subtitle &&
-        hero.description
-      ) {
+      if (hero && typeof hero === "object") {
         setHeroData((prev) => ({
           ...prev,
-          title: hero.title,
-          subtitle: hero.subtitle,
-          description: hero.description,
-          // ctaText and ctaLink always use default
+          ...(hero.title ? { title: hero.title } : {}),
+          ...(hero.subtitle ? { subtitle: hero.subtitle } : {}),
+          ...(hero.description ? { description: hero.description } : {}),
         }));
       }
-      // else: keep default
     } catch (error) {
       console.error('Failed to load hero data:', error);
       setIsLoading(false); // Show default if backend is down

@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { api, AboutData } from '@/lib/api';
+import { api, AboutData, API_BASE_URL } from '@/lib/api';
 import { auth } from '@/lib/auth';
 import { toast } from 'sonner';
 import { Plus, X } from 'lucide-react';
@@ -62,7 +62,7 @@ export default function AboutEditor() {
         // Upload image to backend (which uploads to Cloudinary)
         const formData = new FormData();
         formData.append('image', selectedImage);
-        const res = await fetch('https://joash-backend.onrender.com/api/upload', {
+        const res = await fetch(`${API_BASE_URL}/upload`, {
           method: 'POST',
           headers: {
             Authorization: `Bearer ${token}`,

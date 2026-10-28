@@ -2,7 +2,8 @@
 import { motion, useInView } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { ExternalLink, Github, Star } from 'lucide-react';
+import { ExternalLink, Github, Star, ArrowRight } from 'lucide-react';
+import Link from 'next/link';
 import { useState, useEffect, useRef } from 'react';
 import { API_BASE_URL } from '@/lib/api';
 import { SectionHeading } from '@/components/ui/section-heading';
@@ -47,7 +48,9 @@ export default function ProjectsSection() {
     fetchProjects();
   }, []);
 
-  const allProjects = Array.isArray(projects) ? projects : [];
+  const allProjects = Array.isArray(projects)
+    ? [...projects].sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0))
+    : [];
 
   return (
     <section ref={ref} className="py-20 bg-slate-900 text-white relative overflow-hidden">
@@ -67,7 +70,7 @@ export default function ProjectsSection() {
           transition={{ duration: 0.8 }}
           className="text-center mb-16"
         >
-          <SectionHeading kicker="Portfolio" title="Featured Projects" className="mb-6" />
+          <SectionHeading kicker="Portfolio" title="My Projects" className="mb-6" />
           <p className="text-xl text-slate-300 max-w-2xl mx-auto">
             A showcase of my recent work and creative solutions
           </p>
@@ -149,6 +152,17 @@ export default function ProjectsSection() {
                         </a>
                       </Button>
                     )}
+                    <Button
+                      asChild
+                      size="sm"
+                      variant="outline"
+                      className="border-slate-600 text-slate-300 hover:bg-slate-700 flex-1"
+                    >
+                      <Link href={`/projects/${project.id ?? project._id}`}>
+                        <ArrowRight className="w-3 h-3 mr-1" />
+                        Details
+                      </Link>
+                    </Button>
                   </div>
                 </div>
               </SurfaceCard>

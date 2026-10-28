@@ -1,4 +1,4 @@
-export const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL ?? 'https://joash-backend.onrender.com/api';
+export const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL ?? 'https://createdbyjoash-portfolio-api.fly.dev/api';
 
 export interface Booking {
   id: number;
@@ -180,6 +180,14 @@ export const api = {
     const response = await fetch(`${API_BASE_URL}/projects`);
     if (!response.ok) throw new Error('Failed to fetch projects');
     return response.json();
+  },
+
+  getProjectById: async (id: string | number): Promise<Project | null> => {
+    const response = await fetch(`${API_BASE_URL}/projects`);
+    if (!response.ok) throw new Error('Failed to fetch projects');
+    const body = await response.json();
+    const projects: Project[] = Array.isArray(body) ? body : body?.projects ?? [];
+    return projects.find((p) => String(p.id ?? p._id) === String(id)) ?? null;
   },
 
   createProject: async (data: Omit<Project, 'id'>, token: string, imageFile?: File): Promise<Project> => {
